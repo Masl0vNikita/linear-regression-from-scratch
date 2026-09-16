@@ -47,9 +47,33 @@ def gradient_descent(X, y, w, b, alpha, num_iters):
             w[j] = w[j] - alpha * dj_dw[j]
 
 
-        if i % 10000 == 0:
+        if i % 100 == 0:
             y_pred = predict(X, w, b)
             cost = mean_squared_error(y, y_pred)
             print(f"Итерация {i:5d} | Ошибка (MSE): {cost:.4f}")
             
     return w, b
+
+def normalize_features(X):
+    N = len(X)         
+    n_features = len(X[0]) 
+    
+
+    X_norm = [[0.0] * n_features for _ in range(N)]
+    
+    for j in range(n_features):
+
+        mean = sum(X[i][j] for i in range(N)) / N
+        
+  
+        variance = sum((X[i][j] - mean) ** 2 for i in range(N)) / N
+        std = variance ** 0.5
+        
+
+        for i in range(N):
+            if std == 0:
+                X_norm[i][j] = X[i][j] - mean 
+            else:
+                X_norm[i][j] = (X[i][j] - mean) / std
+                
+    return X_norm
